@@ -57,7 +57,7 @@ async function fetchData(){
 }
 fetchData();
 
-//ASsignment 5 Solution
+//Assignment 5 Solution
 function multiplyWithCallback(numbers, callback) {
     // Check if numbers is an array
     if (!Array.isArray(numbers)) {
@@ -112,8 +112,62 @@ function multiplyWithCallback(numbers, callback) {
     .catch((error) => {
       console.error('Error:', error);
     });
-  
-  
+
+  //Assignment 7
+  async function fetchMultipleData(urls) {
+    try {
+        const responses = await Promise.all(urls.map(async (url) => {
+            const response = await fetch(url); 
+            if (!response.ok) {
+                throw new Error(`Error fetching data from ${url}`);
+            }
+            return response.json();
+        }));
+        return responses;
+    } catch (error) {
+        console.error('Error fetching data:', error.message);
+        return []; 
+    }
+}
+
+// Example usage:
+const urlsToFetch = [
+    'https://jsonplaceholder.typicode.com/todos/1',
+    'https://jsonplaceholder.typicode.com/todos/2',
+    
+];
+
+fetchMultipleData(urlsToFetch)
+    .then((responses) => {
+        console.log('Fetched data:', responses);
+    })
+    .catch((error) => {
+        console.error('Error:', error.message);
+    });
+    
+//Assignment 8
+async function racePromises(promises) {
+  try {
+      const result = await Promise.race(promises);
+      return result; 
+  } catch (error) {
+      console.error('Error:', error.message);
+      throw error; 
+  }
+}
+
+// Example usage:
+const promise1 = new Promise((resolve) => setTimeout(() => resolve('First resolved'), 1000));
+const promise2 = new Promise((_, reject) => setTimeout(() => reject(new Error('Second rejected')), 500));
+
+racePromises([promise1, promise2])
+  .then((result) => {
+      console.log('Result:', result); 
+  })
+  .catch((error) => {
+      console.error('Error:', error.message); 
+  });
+
 
 
 
